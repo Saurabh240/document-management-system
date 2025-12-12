@@ -23,9 +23,9 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # default env vars (can be overridden)
-ENV SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pocdb \
-    SPRING_DATASOURCE_USERNAME=test \
-    SPRING_DATASOURCE_PASSWORD=test \
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/documentdb \
+    SPRING_DATASOURCE_USERNAME=documentdb \
+    SPRING_DATASOURCE_PASSWORD=Documentdb@123 \
     JWT_SECRET=Pa8QFmbk/9BR33m+K6ischX4VEoyJ0DM3JlB3hf0uuw=
 
 ENTRYPOINT ["java","-jar","/app/app.jar"]
