@@ -151,7 +151,7 @@ public class DocumentService {
         }
 
         // NEW: Order documents by createdAt DESC (or id DESC if fallback)
-        return docRepo.findByCompanyIdOrderByUploadedAtDesc(companyId)
+        return docRepo.findByCompanyIdAndStatusOrderByUploadedAtDesc(companyId, Status.ACTIVE)
                 .stream()
                 .map(d -> new DocumentMetadata(
                         d.getId(),

@@ -2,6 +2,7 @@ package com.document.management.controller;
 
 import com.document.management.dto.DocumentMetadata;
 import com.document.management.model.Document;
+import com.document.management.model.Status;
 import com.document.management.repository.DocumentRepository;
 import com.document.management.service.DocumentService;
 import org.springframework.core.io.Resource;
@@ -41,7 +42,7 @@ public class DocumentController {
     @GetMapping
     public List<DocumentMetadata> list(@PathVariable Long companyId) {
 
-        return documentRepo.findByCompanyIdOrderByUploadedAtDesc(companyId)
+        return documentRepo.findByCompanyIdAndStatusOrderByUploadedAtDesc(companyId, Status.ACTIVE)
                 .stream()
                 .map(d -> new DocumentMetadata(
                         d.getId(),
