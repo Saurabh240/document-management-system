@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findPendingUsersOrderByCreatedAtDesc();
     @Query("SELECT u FROM User u ORDER BY u.createdAt DESC")
     List<User> findAllUsersOrderByCreatedAtDesc();
+    boolean existsByEmail(String email);
 }
