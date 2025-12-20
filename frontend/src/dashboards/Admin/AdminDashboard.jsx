@@ -1,5 +1,7 @@
 import DocumentManager from "../../components/DocumentManager.jsx";
 import DetailsModal from "../../components/DetailsModal";
+import UserModal from "../../components/modals/UserModal.jsx";
+import CompanyModal from "../../components/modals/CompanyModal.jsx";
 
 import api from "../../api/axios.js";
 import React, { useState, useEffect } from "react";
@@ -16,12 +18,6 @@ import {
   Menu,
   X,
   FileText,
-  Hash,
-  MapPin,
-  Phone,
-  User,
-  Mail,
-  Calendar,
 } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -29,9 +25,7 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [pendingUsers, setPendingUsers] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -44,21 +38,16 @@ const AdminDashboard = () => {
   const [detailsType, setDetailsType] = useState(""); // "user" | "company"
   const [detailsData, setDetailsData] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
+  const [companyModalOpen, setCompanyModalOpen] = useState(false);
+  const [editingCompanyId, setEditingCompanyId] = useState(null);
+
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
 
   const itemsPerPage = 10;
 
   const userRole = localStorage.getItem("role");
-const companyId = localStorage.getItem("companyId");
-
-
-  // Add status === "ACTIVE" filter as per instructions
-  const activeUsers = users.filter((user) => user.status === "ACTIVE");
-  const activePendingUsers = pendingUsers.filter(
-    (user) => user.status === "ACTIVE"
-  );
-  const activeCompanies = companies.filter(
-    (company) => company.status === "ACTIVE"
-  );
+  const companyId = localStorage.getItem("companyId");
 
   const showUserDetails = async (userId) => {
     setDetailsType("user");
@@ -92,24 +81,6 @@ const companyId = localStorage.getItem("companyId");
     }
   };
 
-  const [companyForm, setCompanyForm] = useState({
-    name: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    contact_person: "",
-    email: "",
-    phone: "",
-    einNumber: "",
-  });
-
-  const [userForm, setUserForm] = useState({
-    email: "",
-    password: "",
-    companyId: "",
-  });
-
   useEffect(() => {
     fetchCompanies();
     fetchUsers();
@@ -120,11 +91,11 @@ const companyId = localStorage.getItem("companyId");
   useEffect(() => {
     const items =
       activeTab === "users"
-        ? activeUsers
+        ? users
         : activeTab === "pending"
-        ? activePendingUsers
+        ? pendingUsers
         : activeTab === "companies"
-        ? activeCompanies
+        ? companies
         : [];
     const total = Math.ceil(items.length / itemsPerPage);
     if (currentPage > total && total > 0) {
@@ -189,72 +160,71 @@ const companyId = localStorage.getItem("companyId");
     }
   };
 
-  const isUserPending = (userId) =>
-    activePendingUsers.some((u) => u.id === userId);
+  const isUserPending = (userId) => pendingUsers.some((u) => u.id === userId);
 
-  const createCompany = async () => {
-    if (!companyForm.name.trim()) return alert("Company name is required");
+  // const createCompany = async () => {
+  //   if (!companyForm.name.trim()) return alert("Company name is required");
 
-    try {
-      await api.post("/admin/companies", {
-        name: companyForm.name.trim(),
-        address: companyForm.address.trim(),
-        city: companyForm.city.trim(),
-        state: companyForm.state.trim(),
-        zipCode: companyForm.zipCode.trim(),
-        contact_person: companyForm.contact_person.trim(),
-        email: companyForm.email.trim(),
-        phone: companyForm.phone.trim(),
-        einNumber: companyForm.einNumber.trim(),
-      });
+  //   try {
+  //     await api.post("/admin/companies", {
+  //       name: companyForm.name.trim(),
+  //       address: companyForm.address.trim(),
+  //       city: companyForm.city.trim(),
+  //       state: companyForm.state.trim(),
+  //       zipCode: companyForm.zipCode.trim(),
+  //       contact_person: companyForm.contact_person.trim(),
+  //       email: companyForm.email.trim(),
+  //       phone: companyForm.phone.trim(),
+  //       einNumber: companyForm.einNumber.trim(),
+  //     });
 
-      setCompanyForm({
-        name: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        contact_person: "",
-        email: "",
-        phone: "",
-        einNumber: "",
-      });
-      setShowModal(false);
-      await fetchCompanies();
-      alert("Company created successfully!");
-    } catch (error) {
-      alert(
-        "Failed to create company: " +
-          (error.response?.data?.message || error.message)
-      );
-    }
-  };
+  //     setCompanyForm({
+  //       name: "",
+  //       address: "",
+  //       city: "",
+  //       state: "",
+  //       zipCode: "",
+  //       contact_person: "",
+  //       email: "",
+  //       phone: "",
+  //       einNumber: "",
+  //     });
+  //     setShowModal(false);
+  //     await fetchCompanies();
+  //     alert("Company created successfully!");
+  //   } catch (error) {
+  //     alert(
+  //       "Failed to create company: " +
+  //         (error.response?.data?.message || error.message)
+  //     );
+  //   }
+  // };
 
-  const createUser = async () => {
-    if (
-      !userForm.email.trim() ||
-      !userForm.password.trim() ||
-      !userForm.companyId
-    ) {
-      return alert("Please fill all fields");
-    }
+  // const createUser = async () => {
+  //   if (
+  //     !userForm.email.trim() ||
+  //     !userForm.password.trim() ||
+  //     !userForm.companyId
+  //   ) {
+  //     return alert("Please fill all fields");
+  //   }
 
-    try {
-      await api.post("/admin/users", {
-        email: userForm.email.trim(),
-        password: userForm.password.trim(),
-        companyId: parseInt(userForm.companyId),
-      });
+  //   try {
+  //     await api.post("/admin/users", {
+  //       email: userForm.email.trim(),
+  //       password: userForm.password.trim(),
+  //       companyId: parseInt(userForm.companyId),
+  //     });
 
-      setUserForm({ email: "", password: "", companyId: "" });
-      setShowModal(false);
-      await Promise.all([fetchUsers(), fetchPendingUsers()]);
-      alert("User created successfully!");
-    } catch (error) {
-      alert("Failed to create user");
-      console.error(error);
-    }
-  };
+  //     setUserForm({ email: "", password: "", companyId: "" });
+  //     setShowModal(false);
+  //     await Promise.all([fetchUsers(), fetchPendingUsers()]);
+  //     alert("User created successfully!");
+  //   } catch (error) {
+  //     alert("Failed to create user");
+  //     console.error(error);
+  //   }
+  // };
 
   const toggleApproval = async (userId, approve) => {
     const confirmMsg = approve
@@ -306,87 +276,109 @@ const companyId = localStorage.getItem("companyId");
     }
   };
 
-  const updateCompany = async () => {
-    if (!companyForm.name.trim()) return alert("Company name is required");
+  //   const updateCompany = async () => {
+  //   if (!companyForm.name.trim()) {
+  //     return alert("Company name is required");
+  //   }
 
-    try {
-      await api.put(`/admin/companies/${selectedItem.id}`, {
-        name: companyForm.name.trim(),
-      });
-      setShowModal(false);
-      await fetchCompanies();
-      alert("Company updated successfully!");
-    } catch (error) {
-      alert("Failed to update company");
-    }
-  };
+  //   try {
+  //     await api.put(`/admin/companies/${selectedItem.id}`, {
+  //       name: companyForm.name.trim(),
+  //       address: companyForm.address.trim(),
+  //       city: companyForm.city.trim(),
+  //       state: companyForm.state.trim(),
+  //       zipCode: companyForm.zipCode.trim(),
+  //       contact_person: companyForm.contact_person.trim(),
+  //       email: companyForm.email.trim(),
+  //       phone: companyForm.phone.trim(),
+  //       einNumber: companyForm.einNumber.trim(),
+  //     });
 
-  const updateUser = async () => {
-    if (!userForm.email.trim()) return alert("Email is required");
-    if (!userForm.companyId) return alert("Please select a company");
+  //     setShowModal(false);
+  //     await fetchCompanies();
+  //     alert("Company updated successfully!");
+  //   } catch (error) {
+  //     alert("Failed to update company");
+  //   }
+  // };
 
-    const payload = {
-      email: userForm.email.trim(),
-      companyId: parseInt(userForm.companyId),
-    };
-    if (userForm.password?.trim()) payload.password = userForm.password.trim();
+  // const updateUser = async () => {
+  //   if (!userForm.email.trim()) return alert("Email is required");
+  //   if (!userForm.companyId) return alert("Please select a company");
 
-    try {
-      await api.put(`/admin/users/${selectedItem.id}`, payload);
-      closeModal();
-      await Promise.all([fetchUsers(), fetchPendingUsers()]);
-      alert("User updated successfully!");
-    } catch (error) {
-      alert("Failed to update user");
-    }
-  };
+  //   const payload = {
+  //     email: userForm.email.trim(),
+  //     companyId: parseInt(userForm.companyId),
+  //   };
+  //   if (userForm.password?.trim()) payload.password = userForm.password.trim();
 
-  const openModal = (type, item = null) => {
-    setModalType(type);
-    setSelectedItem(item);
-    if (type === "editCompany" && item) {
-      setCompanyForm({ ...companyForm, name: item.name });
-    } else if ((type === "createUser" || type === "editUser") && item) {
-      setUserForm({
-        email: item.email,
-        password: "",
-        companyId: item.company?.id || "",
-      });
-    } else if (type === "createUser") {
-      setUserForm({ email: "", password: "", companyId: "" });
-    } else if (type === "createCompany") {
-      setCompanyForm({
-        name: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        contact_person: "",
-        email: "",
-        phone: "",
-        einNumber: "",
-      });
-    }
-    setShowModal(true);
-  };
+  //   try {
+  //     await api.put(`/admin/users/${selectedItem.id}`, payload);
+  //     closeModal();
+  //     await Promise.all([fetchUsers(), fetchPendingUsers()]);
+  //     alert("User updated successfully!");
+  //   } catch (error) {
+  //     alert("Failed to update user");
+  //   }
+  // };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setModalType("");
-    setSelectedItem(null);
-    setCompanyForm({
-      name: "",
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      contact_person: "",
-      email: "",
-      phone: "",
-      einNumber: "",
-    });
-    setUserForm({ email: "", password: "", companyId: "" });
-  };
+  //   const openModal = (type, item = null) => {
+  //     setModalType(type);
+  //     setSelectedItem(item);
+  //     if (type === "editCompany" && item) {
+  //   setCompanyForm({
+  //     name: item.name || "",
+  //     address: item.address || "",
+  //     city: item.city || "",
+  //     state: item.state || "",
+  //     zipCode: item.zipCode || "",
+  //     contact_person: item.contact_person || "",
+  //     email: item.email || "",
+  //     phone: item.phone || "",
+  //     einNumber: item.einNumber || "",
+  //   });
+  // }
+  //  else if ((type === "createUser" || type === "editUser") && item) {
+  //       setUserForm({
+  //         email: item.email,
+  //         password: "",
+  //         companyId: item.company?.id || "",
+  //       });
+  //     } else if (type === "createUser") {
+  //       setUserForm({ email: "", password: "", companyId: "" });
+  //     } else if (type === "createCompany") {
+  //       setCompanyForm({
+  //         name: "",
+  //         address: "",
+  //         city: "",
+  //         state: "",
+  //         zipCode: "",
+  //         contact_person: "",
+  //         email: "",
+  //         phone: "",
+  //         einNumber: "",
+  //       });
+  //     }
+  //     setShowModal(true);
+  //   };
+
+  // const closeModal = () => {
+  //   setShowModal(false);
+  //   setModalType("");
+  //   setSelectedItem(null);
+  //   setCompanyForm({
+  //     name: "",
+  //     address: "",
+  //     city: "",
+  //     state: "",
+  //     zipCode: "",
+  //     contact_person: "",
+  //     email: "",
+  //     phone: "",
+  //     einNumber: "",
+  //   });
+  //   setUserForm({ email: "", password: "", companyId: "" });
+  // };
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -414,14 +406,14 @@ const companyId = localStorage.getItem("companyId");
     });
   };
 
-  const getFilteredUsers = () => filterUsers(activeUsers, userFilter);
+  const getFilteredUsers = () => filterUsers(users, userFilter);
   const getFilteredPendingUsers = () =>
-    filterUsers(activePendingUsers, pendingFilter);
+    filterUsers(pendingUsers, pendingFilter);
 
   const getCurrentItems = () => {
     if (activeTab === "users") return getFilteredUsers();
     if (activeTab === "pending") return getFilteredPendingUsers();
-    if (activeTab === "companies") return activeCompanies;
+    if (activeTab === "companies") return companies;
     return [];
   };
 
@@ -433,7 +425,7 @@ const companyId = localStorage.getItem("companyId");
       id: "pending",
       label: "Pending Users",
       icon: UserPlus,
-      badge: activePendingUsers.length,
+      badge: pendingUsers.length,
     },
     { id: "companies", label: "Companies", icon: Building2 },
     { id: "documents", label: "Documents", icon: FileText },
@@ -544,7 +536,10 @@ const companyId = localStorage.getItem("companyId");
           <div className="mb-4 flex justify-end">
             {activeTab === "companies" && (
               <button
-                onClick={() => openModal("createCompany")}
+                onClick={() => {
+                  setEditingCompanyId(null);
+                  setCompanyModalOpen(true);
+                }}
                 className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 text-sm transition-colors"
               >
                 <PlusCircle size={18} /> <span>Add Company</span>
@@ -553,7 +548,10 @@ const companyId = localStorage.getItem("companyId");
 
             {(activeTab === "users" || activeTab === "pending") && (
               <button
-                onClick={() => openModal("createUser")}
+                onClick={() => {
+                  setEditingUser(null);
+                  setUserModalOpen(true);
+                }}
                 className="flex items-center gap-2 bg-blue-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 text-sm transition-colors"
               >
                 <UserPlus size={18} /> <span>Add User</span>
@@ -589,7 +587,7 @@ const companyId = localStorage.getItem("companyId");
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900"
                   >
                     <option value="">All Companies</option>
-                    {activeCompanies.map((company) => (
+                    {companies.map((company) => (
                       <option key={company.id} value={company.id}>
                         {company.name}
                       </option>
@@ -650,7 +648,7 @@ const companyId = localStorage.getItem("companyId");
                 {/* Users Tab */}
                 {activeTab === "users" && (
                   <div className="overflow-x-auto">
-                    {activeUsers.length === 0 ? (
+                    {users.length === 0 ? (
                       <div className="p-12 text-center text-gray-500">
                         No users found
                       </div>
@@ -731,7 +729,10 @@ const companyId = localStorage.getItem("companyId");
                                   </button>
 
                                   <button
-                                    onClick={() => openModal("editUser", user)}
+                                    onClick={() => {
+                                      setEditingUser(user);
+                                      setUserModalOpen(true);
+                                    }}
                                     className="text-gray-600 hover:text-gray-900 cursor-pointer"
                                   >
                                     <Edit2 size={16} />
@@ -756,7 +757,7 @@ const companyId = localStorage.getItem("companyId");
                 {/* Pending Tab */}
                 {activeTab === "pending" && (
                   <div className="overflow-x-auto">
-                    {activePendingUsers.length === 0 ? (
+                    {pendingUsers.length === 0 ? (
                       <div className="p-12 text-center text-gray-500">
                         No pending users
                       </div>
@@ -823,7 +824,7 @@ const companyId = localStorage.getItem("companyId");
                 {/* Companies Tab */}
                 {activeTab === "companies" && (
                   <div className="overflow-x-auto">
-                    {activeCompanies.length === 0 ? (
+                    {companies.length === 0 ? (
                       <div className="p-12 text-center text-gray-500">
                         No companies found
                       </div>
@@ -840,7 +841,7 @@ const companyId = localStorage.getItem("companyId");
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                          {paginate(activeCompanies).map((company) => (
+                          {paginate(companies).map((company) => (
                             <tr key={company.id} className="hover:bg-gray-50">
                               <td className="pl-8 py-4">
                                 <button
@@ -854,9 +855,10 @@ const companyId = localStorage.getItem("companyId");
                               <td className="px-4 sm:px-6 py-4 text-right">
                                 <div className="flex justify-end gap-2">
                                   <button
-                                    onClick={() =>
-                                      openModal("editCompany", company)
-                                    }
+                                    onClick={() => {
+                                      setEditingCompanyId(company.id);
+                                      setCompanyModalOpen(true);
+                                    }}
                                     className="text-gray-600 hover:text-gray-900"
                                   >
                                     <Edit2 size={16} />
@@ -920,336 +922,23 @@ const companyId = localStorage.getItem("companyId");
       </main>
 
       {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-blue-900">
-                {modalType === "createCompany" && "Add New Company"}
-                {modalType === "editCompany" && "Edit Company"}
-                {modalType === "createUser" && "Add User"}
-                {modalType === "editUser" && "Edit User"}
-              </h3>
-            </div>
-            <div className="p-6 space-y-4">
-              {(modalType === "createCompany" ||
-                modalType === "editCompany") && (
-                <div className="space-y-4 max-h-[60vh] overflow-y-auto px-1">
-                  {/* Basic Information Section */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-blue-100 rounded">
-                        <Building2 className="text-blue-600" size={14} />
-                      </div>
-                      <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                        Basic Information
-                      </h4>
-                    </div>
+      <CompanyModal
+        open={companyModalOpen}
+        companyId={editingCompanyId}
+        onClose={() => setCompanyModalOpen(false)}
+        onSuccess={fetchCompanies}
+      />
 
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Company Name <span className="text-red-500">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={companyForm.name}
-                          onChange={(e) =>
-                            setCompanyForm({
-                              ...companyForm,
-                              name: e.target.value,
-                            })
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                          placeholder="Enter company name"
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          EIN Number
-                        </label>
-                        <div className="relative">
-                          <Hash
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                            size={16}
-                          />
-                          <input
-                            type="text"
-                            value={companyForm.einNumber}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                einNumber: e.target.value,
-                              })
-                            }
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                            placeholder="12-3456789"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Address Section */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-green-100 rounded">
-                        <MapPin className="text-green-600" size={14} />
-                      </div>
-                      <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                        Address Details
-                      </h4>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Street Address
-                        </label>
-                        <input
-                          type="text"
-                          value={companyForm.address}
-                          onChange={(e) =>
-                            setCompanyForm({
-                              ...companyForm,
-                              address: e.target.value,
-                            })
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                          placeholder="124 Flower Street"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            City
-                          </label>
-                          <input
-                            type="text"
-                            value={companyForm.city}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                city: e.target.value,
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                            placeholder="San Francisco"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            State
-                          </label>
-                          <input
-                            type="text"
-                            value={companyForm.state}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                state: e.target.value.toUpperCase(),
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors uppercase text-sm"
-                            placeholder="CA"
-                            maxLength="2"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Zip Code
-                        </label>
-                        <input
-                          type="text"
-                          value={companyForm.zipCode}
-                          onChange={(e) =>
-                            setCompanyForm({
-                              ...companyForm,
-                              zipCode: e.target.value,
-                            })
-                          }
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                          placeholder="95105"
-                          maxLength="10"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contact Information Section */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-purple-100 rounded">
-                        <User className="text-purple-600" size={14} />
-                      </div>
-                      <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                        Contact Information
-                      </h4>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Contact Person
-                        </label>
-                        <div className="relative">
-                          <User
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                            size={16}
-                          />
-                          <input
-                            type="text"
-                            value={companyForm.contact_person}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                contact_person: e.target.value,
-                              })
-                            }
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                            placeholder="Kim John"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <Mail
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                            size={16}
-                          />
-                          <input
-                            type="email"
-                            value={companyForm.email}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                email: e.target.value,
-                              })
-                            }
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                            placeholder="contact@company.com"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                          Phone Number
-                        </label>
-                        <div className="relative">
-                          <Phone
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                            size={16}
-                          />
-                          <input
-                            type="tel"
-                            value={companyForm.phone}
-                            onChange={(e) =>
-                              setCompanyForm({
-                                ...companyForm,
-                                phone: e.target.value,
-                              })
-                            }
-                            className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors text-sm"
-                            placeholder="+1-415-555-1234"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {(modalType === "createUser" || modalType === "editUser") && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={userForm.email}
-                      onChange={(e) =>
-                        setUserForm({ ...userForm, email: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder="user@example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password{" "}
-                      {modalType === "editUser" &&
-                        "(leave blank to keep current)"}
-                      {modalType === "createUser" && "(required)"}
-                    </label>
-                    <input
-                      type="password"
-                      value={userForm.password}
-                      onChange={(e) =>
-                        setUserForm({ ...userForm, password: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                      placeholder={
-                        modalType === "editUser"
-                          ? "Leave blank to keep current"
-                          : "Enter password"
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company
-                    </label>
-                    <select
-                      value={userForm.companyId}
-                      onChange={(e) =>
-                        setUserForm({ ...userForm, companyId: e.target.value })
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900"
-                    >
-                      <option value="">Select a company</option>
-                      {activeCompanies.map((company) => (
-                        <option key={company.id} value={company.id}>
-                          {company.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (modalType === "createCompany") createCompany();
-                  else if (modalType === "editCompany") updateCompany();
-                  else if (modalType === "createUser") createUser();
-                  else if (modalType === "editUser") updateUser();
-                }}
-                className="px-4 py-2 text-sm bg-blue-900 text-white rounded-lg hover:bg-gray-800"
-              >
-                {modalType.startsWith("create") ? "Create" : "Update"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <UserModal
+        open={userModalOpen}
+        user={editingUser}
+        companies={companies}
+        onClose={() => setUserModalOpen(false)}
+        onSuccess={() => {
+          fetchUsers();
+          fetchPendingUsers();
+        }}
+      />
 
       <DetailsModal
         open={detailsOpen}
