@@ -108,14 +108,8 @@ public class UserService {
     }
 
     public List<UserResponse> listAllUsers() {
-        return userRepo.findAllUsersByStatusOrderByCreatedAtDesc().stream()
+        return userRepo.findAllUsersOrderByCreatedAtDesc().stream()
                 .map(u -> new UserResponse(u.getId(), u.getEmail(), u.getRole(), u.getCompany(), u.isApproved(), u.getStatus(), u.getFirstName(), u.getMiddleName(),u.getLastName()))
-                .collect(Collectors.toList());
-    }
-
-    public List<UserResponse> listActiveUsers() {
-        return userRepo.findAllUsersByStatusOrderByCreatedAtDesc().stream()
-                .map(u -> new UserResponse(u.getId(), u.getEmail(), u.getRole(), u.getCompany(), u.isApproved(), u.getStatus(),u.getFirstName(),u.getMiddleName(),u.getLastName()))
                 .collect(Collectors.toList());
     }
 

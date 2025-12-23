@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    WHERE u.role.name = USER
    ORDER BY u.createdAt DESC
    """)
-    List<User> findAllUsersByStatusOrderByCreatedAtDesc();
+    List<User> findAllUsersOrderByCreatedAtDesc();
 
 
     boolean existsByEmail(String email);
