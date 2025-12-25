@@ -38,7 +38,7 @@ ALTER TABLE public.users ADD CONSTRAINT fkin8gn4o1hpiwe6qe4ey7ykwq7 FOREIGN KEY 
 ALTER TABLE public.users ADD CONSTRAINT fkp56c1712k691lhsyewcssf40f FOREIGN KEY (role_id) REFERENCES public.roles(id);
 
 CREATE TABLE IF NOT EXISTS documents (
-	id int8 NOT NULL,
+	id bigserial NOT NULL,
 	company_id int8 NULL,
 	content_type varchar(255) NULL,
 	description varchar(255) NULL,
