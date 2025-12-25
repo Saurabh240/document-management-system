@@ -29,6 +29,10 @@ public class CompanyService {
         return companyRepo.existsByNameAndStatus(name, Status.INACTIVE);
     }
 
+    public boolean existsActiveCompanyWithName(String name) {
+        return companyRepo.existsByNameAndStatus(name, Status.ACTIVE);
+    }
+
     @Transactional
     public void softDeleteCompany(Long id) {
 

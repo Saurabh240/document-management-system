@@ -36,6 +36,10 @@ public class UserService {
 
     public UserResponse register(RegisterRequest req) {
 
+        if (userRepo.existsByEmailAndCompanyId(req.getEmail(), req.getCompanyId())) {
+            throw new RuntimeException("Email already exist for this company");
+        }
+
         User user = new User();
 
         user.setEmail(req.getEmail());
