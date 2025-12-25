@@ -102,10 +102,15 @@ const UserModal = ({ open, onClose, user, onSuccess }) => {
       className="fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4 animate-fadeIn"
       onClick={onClose}
     >
-      <div
-        className="bg-white rounded-xl w-full max-w-md shadow-2xl transform transition-all animate-slideUp"
-        onClick={(e) => e.stopPropagation()}
-      >
+   
+
+<div
+  className="bg-white rounded-xl w-full max-w-md shadow-2xl transform transition-all animate-slideUp
+             max-h-[90vh] overflow-y-auto"
+  onClick={(e) => e.stopPropagation()}
+>
+
+
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-linear-to-r from-purple-50 to-pink-50 rounded-t-xl">
           <div className="flex items-center gap-3">
