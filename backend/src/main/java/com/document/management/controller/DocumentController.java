@@ -81,6 +81,9 @@ public class DocumentController {
         return ResponseEntity.noContent().build();
     }
 
-
+    @PutMapping("/{id}/reactivate")
+    public ResponseEntity<Document> reactivateDocument(@PathVariable Long id) {
+        return ResponseEntity.ok(docService.reactivateDocument(id));
+    }
 }
 
