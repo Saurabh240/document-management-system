@@ -405,47 +405,65 @@ export default function UserDashboard() {
                             </div>
                           </td>
                           <td className="hidden md:table-cell px-6 py-4 text-sm text-gray-600">
-                            {formatFileSize(doc.size)}
-                          </td>
-                          <td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <User className="w-3 h-3" />
-                              <span
-                                className="truncate max-w-[150px]"
-                                title={doc.uploadedBy}
-                              >
-                                {doc.uploadedBy}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="hidden sm:table-cell px-6 py-4 text-xs text-gray-600">
-                            {formatDateTime(doc.uploadedAt)}
-                          </td>
-                          <td className="px-4 sm:px-6 py-4 text-right">
-                            <div className="flex justify-end gap-2">
-                              <button
-                                onClick={() => previewDocument(doc)}
-                                className="text-blue-600 hover:text-blue-800"
-                                title="Preview"
-                              >
-                                <Eye size={16} />
-                              </button>
-                              <button
-                                onClick={() => downloadDocument(doc)}
-                                className="text-green-600 hover:text-green-800"
-                                title="Download"
-                              >
-                                <Download size={16} />
-                              </button>
-                              <button
-                                onClick={() => deleteDocument(doc.id)}
-                                className="text-red-600 hover:text-red-800"
-                                title="Delete"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
+  {formatFileSize(doc.size)}
+</td>
+
+<td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-600">
+  <div className="flex items-center gap-1">
+    <User className="w-3 h-3" />
+    <span
+      className="truncate max-w-[150px]"
+      title={doc.uploadedBy}
+    >
+      {doc.uploadedBy}
+    </span>
+  </div>
+</td>
+
+<td className="hidden sm:table-cell px-6 py-4 text-xs text-gray-600">
+  {formatDateTime(doc.uploadedAt)}
+</td>
+
+<td className="px-4 py-4 text-right">
+  <div className="flex justify-end gap-2">
+    <button
+      onClick={() => previewDocument(doc)}
+      className="text-blue-600 hover:text-blue-800"
+      title="Preview"
+    >
+      <Eye size={16} />
+    </button>
+
+    <button
+      onClick={() => downloadDocument(doc)}
+      className="text-green-600 hover:text-green-800"
+      title="Download"
+    >
+      <Download size={16} />
+    </button>
+
+    {/*   toggle button */}
+    <button
+      onClick={() => toggleDocumentStatus(doc)}
+      className={`px-3 py-1 rounded-full border font-medium text-sm transition-all ${
+        doc.status?.toLowerCase() === "active"
+          ? "bg-green-100 text-green-800 border-green-400 hover:bg-green-200"
+          : "bg-red-100 text-red-800 border-red-400 hover:bg-red-200"
+      }`}
+    >
+      {doc.status?.toLowerCase() === "active" ? "Active" : "Inactive"}
+    </button>
+
+    <button
+      onClick={() => deleteDocument(doc.id)}
+      className="text-red-600 hover:text-red-800"
+      title="Delete"
+    >
+      <Trash2 size={16} />
+    </button>
+  </div>
+</td>
+
                         </tr>
                       ))}
                     </tbody>
