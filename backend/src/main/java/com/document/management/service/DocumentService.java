@@ -69,12 +69,12 @@ public class DocumentService {
     }
 
     // ---------- helper: current user ----------
-    private User getCurrentUser() {
+    private User getCurrentUser(Long companyId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth.getName() == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
         }
-        return userRepo.findByEmail(auth.getName())
+        return userRepo.findByEmailAndCompanyId(auth.getName(), companyId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
     }
 
@@ -93,7 +93,7 @@ public class DocumentService {
         if (!companyRepo.existsById(companyId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found");
         }
-        User current = getCurrentUser();
+        User current = getCurrentUser(companyId);
         // Authorization check: user must be superadmin OR belong to the company
         if (!isSuperAdmin(current) && (current.getCompany() == null || !companyId.equals(current.getCompany().getId()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to upload for this company");
@@ -139,7 +139,7 @@ public class DocumentService {
 
     // ---------- list ----------
     public List<DocumentMetadata> list(Long companyId) {
-        User current = getCurrentUser();
+        User current = getCurrentUser(companyId);
 
         if (!companyRepo.existsById(companyId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Company not found");
@@ -172,7 +172,7 @@ public class DocumentService {
         Document d = docRepo.findById(docId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Document not found"));
 
-        User current = getCurrentUser();
+        User current = getCurrentUser(companyId);
 
         if (!isSuperAdmin(current) && (current.getCompany() == null || !companyId.equals(current.getCompany().getId()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
