@@ -13,7 +13,7 @@ export default function Footer() {
               Global Solutions Tech
             </h2>
             <p className="text-gray-600 leading-relaxed">
-              We deliver software solutions determined by business need.
+              Where Technology Meets Business Excellence..
             </p>
 
             {/* Social Icons */}
@@ -48,25 +48,25 @@ export default function Footer() {
 
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
+                <a href="/about/overview" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
                   <span className="w-0 h-px bg-blue-900 group-hover:w-4 transition-all duration-300"></span>
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
+                <a href="/contact-us" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
                   <span className="w-0 h-px bg-blue-900 group-hover:w-4 transition-all duration-300"></span>
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
+                <a href="/signup" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
                   <span className="w-0 h-px bg-blue-900 group-hover:w-4 transition-all duration-300"></span>
                   Join Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
+                <a href="/contact-us" className="text-gray-600 hover:text-blue-900 transition-colors duration-300 flex items-center gap-2 group">
                   <span className="w-0 h-px bg-blue-900 group-hover:w-4 transition-all duration-300"></span>
                   Our Locations
                 </a>
@@ -116,9 +116,8 @@ export default function Footer() {
 
             <div className="space-y-4">
               <p className="text-gray-600 leading-relaxed">
-                99 Wood Ave South, Suite # 308<br />
-                Iselin, NJ 08830<br />
-                United States
+                PO Box 902, South Windsor<br />
+                CT 06074 <br />
               </p>
 
               <div className="space-y-2">
@@ -126,7 +125,7 @@ export default function Footer() {
                   <span className="text-blue-900 font-semibold">Phone:</span> +1 212-729-6543
                 </p>
                 <p className="text-gray-600">
-                  <span className="text-blue-900 font-semibold">Email:</span> info@globalsolutions.com
+                  <span className="text-blue-900 font-semibold">Email:</span> info@ gstechsystems.com
                 </p>
               </div>
             </div>

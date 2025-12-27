@@ -18,10 +18,10 @@ export default function ContactBar() {
             <div className="flex items-center gap-2.5">
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
               <a
-                href="tel:+12127296543"
+                href="tel:+1860-337-2116"
                 className="text-base sm:text-lg font-medium hover:text-blue-200 transition"
               >
-                +1 212-729-6543
+                +1 860-337-2116
               </a>
             </div>
 
@@ -29,10 +29,10 @@ export default function ContactBar() {
             <div className="flex items-center gap-2.5">
               <Mail className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
               <a
-                href="mailto:info@globalsolutions.com"
+                href="mailto:info@ gstechsystems.com"
                 className="text-base sm:text-lg font-medium hover:text-blue-200 transition break-all sm:break-normal"
               >
-                info@globalsolutions.com
+                info@ gstechsystems.com
               </a>
             </div>
           </div>

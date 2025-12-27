@@ -29,8 +29,8 @@ export default function ContactSection() {
             
             <h3 className="font-bold text-gray-900 text-lg mb-3">Address</h3>
             <p className="text-gray-600 text-sm leading-relaxed">
-              99 Wood Ave South, Suite # 308<br />
-              Iselin, NJ 08830
+              PO Box 902, South Windsor <br />
+              CT 06074
             </p>
           </div>
 
@@ -56,7 +56,7 @@ export default function ContactSection() {
             
             <h3 className="font-bold text-gray-900 text-lg mb-3">Email Us</h3>
             <p className="text-gray-600 text-sm">
-              info@globalsolutions.com
+              info@ gstechsystems.com
             </p>
           </div>
 

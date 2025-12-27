@@ -24,7 +24,7 @@ function HowCanWeHelp() {
   <div className="text-center">
     <h1 className="text-4xl font-bold mt-8 mb-4">How Can We Help?</h1>
     <p className="text-lg text-gray-800 leading-relaxed mb-6 max-w-5xl mx-auto"> 
-      We deliver software solutions determined by business need.
+      Where Technology Meets Business Excellence..
     </p>
   </div>
 

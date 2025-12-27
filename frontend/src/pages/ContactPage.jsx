@@ -229,7 +229,7 @@ const ContactPage = () => {
                   <div>
                     <h4 className="font-semibold text-gray-800">Email</h4>
                     <p className="text-gray-600 mt-1">
-                      info@globalsolutions.com<br />
+                      info@ gstechsystems.com<br />
                       support@globalsolutions.com
                     </p>
                   </div>

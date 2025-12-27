@@ -2,23 +2,23 @@
 const AboutServicesSection = () => {
   const services = [
     {
-      title: "Onsite & Offshore Development",
-      desc: "We provide customized Onsite & Offshore Development solutions designed to provide you with the right mix of local expertise and offshore resources to drive innovation, efficiency, and growth.",
+      title: "Enterprise IT Solutions",
+      desc: "provide comprehensive, scalable, and secure technology frameworks that empower organizations to streamline operations, enhance collaboration, and drive digital transformation.",
       icon: "🏢",
     },
     {
-      title: "Mobile Application Development",
-      desc: "Looking to expand your reach and enhance customer engagement? We offer innovative and tailored mobile application development solutions to meet your unique business needs.",
+      title: "Mobile Application Solutions",
+      desc: "Ready to extend your market presence and improve customer interaction? We provide customized mobile application development solutions designed to address your specific business requirements and drive growth.",
       icon: "📱",
     },
     {
-      title: "Custom Application Development",
-      desc: "Looking to modernize your technology and streamline your business processes? We offer innovative and tailored custom application development solutions to meet your unique business needs.",
+      title: "Custom Application Solutions",
+      desc: "Seeking to enhance your technology and simplify business workflows? Our custom application development solutions are crafted to meet your business's unique requirements.",
       icon: "🛠️",
     },
     {
-      title: "Social Networking",
-      desc: "Elevate your social networking experience with Global Solutions Tech! Unlock the power of social networking to foster connections, drive collaboration, and boost your business growth with our innovative solutions.",
+      title: "Marketing-Friendly Solutions",
+      desc: "Streamline your processes, improve efficiency, and scale your operations through advanced technology. Our solutions are designed to support your business with the tools you need to succeed in the digital age.",
       icon: "📈",
     },
   ];
@@ -35,16 +35,11 @@ const AboutServicesSection = () => {
           </div>
 
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-            We are leading provider of custom application and end-to-end IT service.
+            We are a trusted leader in custom applications and full-cycle IT solutions.
           </h2>
 
           <p className="text-gray-600 leading-relaxed text-lg">
-            Founded in 2002, Global Solutions Tech is a leading IT service company committed to
-            delivering innovative and customized solutions to help businesses thrive in a
-            rapidly evolving digital landscape. With our extensive industry expertise,
-            technical knowledge, and client-centric approach, we empower organizations to
-            optimize their technology infrastructure, streamline business processes, and
-            achieve their strategic objectives.
+          Global Solutions Tech is at the forefront of IT services, offering cutting-edge, customized solutions that enable businesses to thrive in a fast-evolving digital era. With our extensive knowledge and client-first approach, we empower organizations to streamline operations, optimize IT infrastructure, and achieve their key objectives.
           </p>
 
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 rounded-2xl p-6">
@@ -53,11 +48,7 @@ const AboutServicesSection = () => {
               <span className="text-xl font-bold text-gray-900">Our Mission</span>
             </div>
             <p className="text-gray-600 leading-relaxed">
-              Our mission is to transform businesses by leveraging cutting-edge technology,
-              fostering innovation, and delivering exceptional value through our comprehensive
-              range of IT services. We are dedicated to helping our clients stay ahead of the
-              competition, drive operational efficiency, and achieve sustainable growth in
-              today's digital economy.
+            Our mission is to empower businesses by harnessing the power of advanced technology, driving innovation, and delivering unmatched value through our full suite of IT services. We are committed to helping our clients stay competitive, improve operational efficiency, and sustain growth in the evolving digital landscape.
             </p>
           </div>
 

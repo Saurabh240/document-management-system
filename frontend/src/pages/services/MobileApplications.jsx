@@ -234,10 +234,10 @@ export default function Consulting() {
                 <div>
                   <p className="text-blue-100 text-sm mb-2">Email Us</p>
                   <a
-                    href="mailto:info@globalsolutions.com"
+                    href="mailto:info@ gstechsystems.com"
                     className="text-sm sm:text-base hover:underline break-all"
                   >
-                    info@globalsolutions.com
+                    info@ gstechsystems.com
                   </a>
                 </div>
               </div>

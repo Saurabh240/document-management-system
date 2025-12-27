@@ -16,12 +16,12 @@ const services = [
     link: "/saas",
   },
   {
-    title: "Internet of Things",
+    title: "E-commerce Solutions",
     img: "https://www.tanishasystems.com/assets/img/internet-of-things-7107054_1280.jpg",
     link: "/iot",
   },
   {
-    title: "Cyber Security",
+    title: "Custom Software",
     img: "https://www.tanishasystems.com/assets/img/cyber-security-1805632_1280.png",
     link: "/cyber-security",
   },
@@ -47,9 +47,7 @@ const ServicesSection = () => {
 
           {/* Description */}
           <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-            Global Solutions Tech empowers businesses to update their technology, rethink
-            their processes, and revolutionize customer experiences, enabling them
-            to stay competitive in an ever-evolving marketplace.
+          Global Solutions Tech strives to transform businesses by applying cutting-edge technology, sparking innovation, and offering unparalleled value with our diverse IT services. Our focus is on helping clients stay competitive, boost efficiency, and achieve growth.
           </p>
         </div>
 

@@ -19,7 +19,7 @@ function About() {
         <div className="text-center">
             <h1 className="text-4xl font-bold mb-4 m-6 ">Overview</h1>
             <p className="text-lg  text-gray-800 leading-relaxed mb-8 m-4 ">
-              We are leading provider of custom application and end-to-end IT service.
+              We are a trusted leader in custom applications and full-cycle IT solutions.
             </p>
    
           </div>
@@ -54,7 +54,7 @@ function About() {
   <div className="w-full grid md:grid-cols-2 gap-0 items-center">
     
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-4 text-blue-900">Our Mission</h2>
+      <h2 className="text-3xl font-bold mb-4 text-blue-900">Our Commitment</h2>
       <p className="text-gray-700 leading-relaxed">
         To develop Outsource and Co-source Turnkey Projects for Government and Industries 
         around the globe and yield higher productivity, higher profitability 

@@ -1,16 +1,16 @@
 export default function ClientLogos() {
   const logos = [
-    "https://www.tanishasystems.com/assets/img/clients/MPHASIS_logo.png",
-    "https://www.tanishasystems.com/assets/img/clients/infosys-logo.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/Wipro_Logo.png",
-    "https://www.tanishasystems.com/assets/img/clients/IBM-57502b16.png",
-    "https://www.tanishasystems.com/assets/img/clients/incedo_Logo.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/tavant-technologies.png",
-    "https://www.tanishasystems.com/assets/img/clients/200X100_Atos.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/200X100_UBS.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/200X100_McKesson.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/200X100_Dell.jpg",
-    "https://www.tanishasystems.com/assets/img/clients/200X100_PartnersHealthCare.jpg"
+    // "https://www.tanishasystems.com/assets/img/clients/MPHASIS_logo.png",
+    // "https://www.tanishasystems.com/assets/img/clients/infosys-logo.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/Wipro_Logo.png",
+    // "https://www.tanishasystems.com/assets/img/clients/IBM-57502b16.png",
+    // "https://www.tanishasystems.com/assets/img/clients/incedo_Logo.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/tavant-technologies.png",
+    // "https://www.tanishasystems.com/assets/img/clients/200X100_Atos.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/200X100_UBS.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/200X100_McKesson.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/200X100_Dell.jpg",
+    // "https://www.tanishasystems.com/assets/img/clients/200X100_PartnersHealthCare.jpg"
     
   ];
 
