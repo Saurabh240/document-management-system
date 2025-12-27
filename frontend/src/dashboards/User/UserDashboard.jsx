@@ -100,16 +100,17 @@ export default function UserDashboard() {
       );
 
       if (response.data && Array.isArray(response.data)) {
-        let mappedData = response.data.map((doc) => {
-          return {
-            id: doc.id,
-            filename: doc.filename || doc.name,
-            size: doc.size,
-            contentType: doc.contentType,
-            uploadedBy: doc.uploadedBy || doc.user || "Unknown User",
-            uploadedAt: doc.uploadedAt || doc.createdAt,
-          };
-        });
+       let mappedData = response.data.map((doc) => ({
+  id: doc.id,
+  filename: doc.filename,
+  size: doc.size,
+  contentType: doc.contentType,
+  uploadedBy: doc.uploadedByUserId || "Unknown",
+  uploadedAt: doc.uploadedAt,
+  status: doc.status, 
+}));
+
+
 
         mappedData.sort((a, b) => {
           const dateA = new Date(a.uploadedAt).getTime();
@@ -179,6 +180,34 @@ export default function UserDashboard() {
       setUploading(false);
     }
   };
+
+const toggleDocumentStatus = async (doc) => {
+  try {
+    if (doc.status === "ACTIVE") {
+      // Soft delete sets status to INACTIVE
+      await api.delete(`/users/companies/${companyId}/documents/${doc.id}`);
+      // Update state locally instead of refetching
+      setDocuments((prev) =>
+        prev.map((d) =>
+          d.id === doc.id ? { ...d, status: "INACTIVE" } : d
+        )
+      );
+    } else {
+      // Reactivate document
+      await api.put(`/users/companies/${companyId}/documents/${doc.id}/reactivate`);
+      setDocuments((prev) =>
+        prev.map((d) =>
+          d.id === doc.id ? { ...d, status: "ACTIVE" } : d
+        )
+      );
+    }
+  } catch (err) {
+    console.error("Toggle failed", err);
+    setError("Failed to update document status");
+  }
+};
+
+
 
   const deleteDocument = async (id) => {
     if (!window.confirm("Are you sure you want to delete this document?"))
@@ -258,6 +287,11 @@ export default function UserDashboard() {
   };
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+ 
+
+
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -390,81 +424,67 @@ export default function UserDashboard() {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {documents.map((doc) => (
-                        <tr key={doc.id} className="hover:bg-gray-50">
-                          <td className="px-4 sm:px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              {getFileIcon(doc.contentType)}
-                              <div>
-                                <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
-                                  {doc.filename}
-                                </div>
-                                <div className="md:hidden text-xs text-gray-500 mt-1">
-                                  {formatFileSize(doc.size)}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="hidden md:table-cell px-6 py-4 text-sm text-gray-600">
-  {formatFileSize(doc.size)}
-</td>
+                       <tr key={doc.id} className="hover:bg-gray-50">
+  <td className="px-4 sm:px-6 py-4">
+    <div className="flex items-center gap-3">
+      {getFileIcon(doc.contentType)}
+      <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+        {doc.filename}
+      </div>
+    </div>
+  </td>
 
-<td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-600">
-  <div className="flex items-center gap-1">
-    <User className="w-3 h-3" />
-    <span
-      className="truncate max-w-[150px]"
-      title={doc.uploadedBy}
-    >
-      {doc.uploadedBy}
-    </span>
-  </div>
-</td>
+  <td className="hidden md:table-cell px-6 py-4 text-sm text-gray-600">
+    {formatFileSize(doc.size)}
+  </td>
 
-<td className="hidden sm:table-cell px-6 py-4 text-xs text-gray-600">
-  {formatDateTime(doc.uploadedAt)}
-</td>
+  <td className="hidden lg:table-cell px-6 py-4 text-sm text-gray-600">
+    {doc.uploadedBy}
+  </td>
 
-<td className="px-4 py-4 text-right">
-  <div className="flex justify-end gap-2">
-    <button
-      onClick={() => previewDocument(doc)}
-      className="text-blue-600 hover:text-blue-800"
-      title="Preview"
-    >
-      <Eye size={16} />
-    </button>
+  <td className="hidden sm:table-cell px-6 py-4 text-xs text-gray-600">
+    {formatDateTime(doc.uploadedAt)}
+  </td>
 
-    <button
-      onClick={() => downloadDocument(doc)}
-      className="text-green-600 hover:text-green-800"
-      title="Download"
-    >
-      <Download size={16} />
-    </button>
+  <td className="px-4 sm:px-6 py-4 text-right">
+    <div className="flex justify-end gap-2 items-center">
+      <button
+        onClick={() => previewDocument(doc)}
+        className="text-blue-600 hover:text-blue-800"
+      >
+        <Eye size={16} />
+      </button>
 
-    {/*   toggle button */}
-    <button
-      onClick={() => toggleDocumentStatus(doc)}
-      className={`px-3 py-1 rounded-full border font-medium text-sm transition-all ${
-        doc.status?.toLowerCase() === "active"
-          ? "bg-green-100 text-green-800 border-green-400 hover:bg-green-200"
-          : "bg-red-100 text-red-800 border-red-400 hover:bg-red-200"
-      }`}
-    >
-      {doc.status?.toLowerCase() === "active" ? "Active" : "Inactive"}
-    </button>
+      <button
+        onClick={() => downloadDocument(doc)}
+        className="text-green-600 hover:text-green-800"
+      >
+        <Download size={16} />
+      </button>
 
-    <button
-      onClick={() => deleteDocument(doc.id)}
-      className="text-red-600 hover:text-red-800"
-      title="Delete"
-    >
-      <Trash2 size={16} />
-    </button>
-  </div>
-</td>
+<button
+  onClick={() => toggleDocumentStatus(doc)}
+  className={`px-3 py-1 rounded-full text-xs font-semibold  ${
+    doc.status === "ACTIVE"
+      ? "bg-green-100 text-green-800 border-green-400"
+      : "bg-red-100 text-red-800 border-red-400"
+  }`}
+>
+  {doc.status === "ACTIVE" ? "Active" : "Inactive"}
+</button>
 
-                        </tr>
+
+
+      <button
+        onClick={() => deleteDocument(doc.id)}
+        className="text-red-600 hover:text-red-800"
+      >
+        <Trash2 size={16} />
+      </button>
+    </div>
+  </td>
+</tr>
+
                       ))}
                     </tbody>
                   </table>
@@ -474,7 +494,6 @@ export default function UserDashboard() {
           )}
         </div>
       </main>
-
       {/* Preview Modal */}
       {preview && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
