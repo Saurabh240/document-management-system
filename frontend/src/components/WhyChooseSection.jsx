@@ -9,33 +9,33 @@ import {
 
 const items = [
   {
-    title: "Expertise and Experience",
-    desc: "Our team of skilled professionals has extensive experience and expertise in various technologies and industries, ensuring the delivery of high-quality and reliable IT solutions.",
+    title: "Expertise",
+    desc: "Our team of experienced professionals brings deep expertise across a wide range of technologies and industries, guaranteeing the delivery of top-tier, reliable IT solutions.",
     icon: Briefcase,
   },
   {
-    title: "Client-Centric Approach",
-    desc: "We prioritize our clients' needs and objectives, and collaborate closely with them to develop customized solutions that align with their business goals and drive measurable results.",
+    title: "Client-Focused",
+    desc: "We place our clients' needs and goals at the forefront, working closely with them to create solutions that align with their business objectives and deliver tangible results.",
     icon: ClipboardList,
   },
   {
-    title: "Innovation and Technology Leadership",
-    desc: "We are committed to staying at the forefront of technological advancements and continuously innovating our services to help our clients adapt to new challenges and opportunities in the digital landscape.",
+    title: "Leadership in Innovation through Technology",
+    desc: "We are dedicated to staying ahead of technological trends and consistently innovating our services to empower our clients to navigate evolving challenges and seize new opportunities in the digital space.",
     icon: BarChart3,
   },
   {
-    title: "Quality and Reliability",
-    desc: "We are dedicated to delivering high-quality and reliable IT services, maintaining the highest standards of excellence, and ensuring customer satisfaction.",
+    title: "Quality and Dependability",
+    desc: "We deliver high-quality, dependable IT services, maintaining excellence and ensuring our clients' satisfaction at every step.",
     icon: CheckCircle,
   },
   {
-    title: "Training",
-    desc: "We believe in imparting modern and best in class training to both aspiring graduates and talented professionals to keep them abreast with changing needs of the competitive market place.",
+    title: "Client Training and Coaching",
+    desc: "Our services offer personalized training sessions that help your team master new technologies, improve their workflow, and align with industry best practices. Empower your team with the knowledge and skills necessary to maximize the use of your technology and business solutions.",
     icon: Sun,
   },
   {
-    title: "Proven Track Record",
-    desc: "With a strong history of successful IT projects and happy clients, Global Solutions Tech is recognized as a trusted IT service provider. Our client success stories and case studies showcase our expertise in delivering high-quality, innovative IT solutions that foster business growth and success.",
+    title: "Demonstrated Success",
+    desc: "Our demonstrated success is built on a foundation of delivering impactful results for our clients. Through a combination of innovative solutions, strategic execution, and dedicated support, we've consistently met and surpassed objectives, enabling businesses to achieve their goals and grow sustainably.",
     icon: CalendarCheck,
   },
 ];
@@ -56,10 +56,9 @@ export default function WhyChoose() {
 
           {/* Sub Heading */}
           <p className="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed mt-6">
-            We prioritize your objectives and challenges to drive tangible
-            results and foster business growth. <br />
-            Trust in our innovative and reliable IT services to transform your
-            business in the digital era.
+          From IT consulting and IT Solutions to software development and cloud services, we offer a comprehensive range of solutions that cover all aspects of your technology needs.
+          <br />
+          We leverage the latest technologies to help you stay ahead of the competition, fostering growth
           </p>
         </div>
 

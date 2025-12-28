@@ -1,9 +1,9 @@
 export default function CertificationsSection() {
   return (
+    <> {/*
     <section className="bg-gradient-to-b from-gray-50 to-white py-24">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
-        {/* Heading */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-4 mb-4">
             <div className="w-12 h-[2px] bg-gradient-to-r from-transparent to-blue-900"></div>
@@ -13,7 +13,6 @@ export default function CertificationsSection() {
             <div className="w-12 h-[2px] bg-gradient-to-l from-transparent to-blue-900"></div>
           </div>
 
-          {/* Subtitle */}
           <p className="text-gray-600 mt-6 max-w-3xl mx-auto text-lg leading-relaxed">
             At Global Solutions Tech, we are committed to maintaining the highest standards of 
             excellence and professionalism in our services. We are proud to hold the following 
@@ -22,7 +21,6 @@ export default function CertificationsSection() {
           </p>
         </div>
 
-        {/* Logos */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           
           <div className="group relative bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 flex items-center justify-center">
@@ -62,8 +60,8 @@ export default function CertificationsSection() {
           </div>
 
         </div>
-
-      </div>
     </section>
+    */}
+    </>
   );
 }

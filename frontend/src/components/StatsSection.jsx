@@ -5,10 +5,10 @@ const StatsSection = () => {
   const sectionRef = useRef(null);
 
   const stats = [
-    { label: "Clients", value: 232, suffix: "+" },
-    { label: "Projects", value: 1057, suffix: "+" },
-    { label: "Hours Of Support", value: 14357, suffix: "+" },
-    { label: "Workers", value: 1181, suffix: "+" },
+    // { label: "Clients", value: 232, suffix: "+" },
+    // { label: "Projects", value: 1057, suffix: "+" },
+    // { label: "Hours Of Support", value: 14357, suffix: "+" },
+    // { label: "Workers", value: 1181, suffix: "+" },
   ];
 
   useEffect(() => {
