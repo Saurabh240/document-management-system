@@ -110,7 +110,7 @@ export default function UserDashboard() {
         filename: doc.filename,
          size: doc.size,
          contentType: doc.contentType,
-        uploadedBy: doc.uploadedByUserId || doc.user || "Unknown",
+          uploadedBy: doc.uploadedBy || "Unknown",
           uploadedAt: doc.uploadedAt,
            status: doc.status, 
              }));
