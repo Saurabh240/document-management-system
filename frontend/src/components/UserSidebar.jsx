@@ -71,7 +71,7 @@ export default function Sidebar({
   </p>
 
   <p className="text-xs text-blue-700 font-medium mt-1">
-    {companyName || ""}
+    {companyName || "No Company Assigned"}
   </p>
 </div>
 
