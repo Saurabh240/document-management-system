@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Mail, Lock, Eye, EyeOff, Building2 } from "lucide-react";
 import api from "../api/axios.js";
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [companies, setCompanies] = useState([]);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     companyName: "",
     remember: false,
   });
+
+       useEffect(() => {
+  const fetchCompanies = async () => {
+    try {
+      const { data } = await api.get("/users/companies/list");
+      setCompanies(data);
+    } catch (err) {
+      console.error("Failed to load companies", err);
+    }
+  };
+  fetchCompanies();
+}, []);
+
+
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -116,27 +132,38 @@ function LoginPage() {
           )}
 
           <div className="space-y-4">
+          
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Company Name
-              </label>
-              <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  type="text"
-                  placeholder="Enter company name"
-                  className={`w-full pl-10 pr-4 py-2.5 border ${
-                    errors.companyName ? "border-red-300" : "border-gray-300"
-                  } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
-                />
-              </div>
-              {errors.companyName && (
-                <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>
-              )}
-            </div>
+  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+    Select Company
+  </label>
+
+  <div className="relative">
+    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+    <select
+      name="companyName"
+      value={formData.companyName}
+      onChange={handleChange}
+      className={`w-full pl-10 pr-4 py-2.5 border ${
+        errors.companyName ? "border-red-300" : "border-gray-300"
+      } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+    >
+      <option value="">Choose a company</option>
+
+      {companies.map((company) => (
+        <option key={company.id} value={company.name}>
+          {company.name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  {errors.companyName && (
+    <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>
+  )}
+</div>
+
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -218,5 +245,4 @@ function LoginPage() {
     </div>
   );
 }
-
 export default LoginPage;
