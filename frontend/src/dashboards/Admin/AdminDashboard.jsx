@@ -77,7 +77,7 @@ const AdminDashboard = () => {
     setDetailsLoading(true);
 
     try {
-      const { data } = await api.get(`/admin/users/${userId}`);
+      const { data } = await api.get(`/users/${userId}`);
       setDetailsData(data);
     } catch (err) {
       alert("Failed to load user details");

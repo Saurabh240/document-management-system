@@ -70,7 +70,7 @@ export default function UserDashboard() {
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   const companyId = userData.companyId;
   const userId = userData.userId;
-
+  const companyName = userData.companyName;
   // Fetch current user details
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -305,15 +305,25 @@ const toggleDocumentStatus = async (doc) => {
           <DashboardNavbar />
         
 
-      <Sidebar
+     {/* <Sidebar
         sidebarOpen={sidebarOpen}
         toggleSidebar={toggleSidebar}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         handleLogout={handleLogout}
-       /* mobileMenuOpen={mobileOpen}*/
-        currentUser={currentUser}
-      />
+       currentUser={currentUser}
+      />*/}
+
+      <Sidebar
+  sidebarOpen={sidebarOpen}
+  toggleSidebar={toggleSidebar}
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+  handleLogout={handleLogout}
+  currentUser={currentUser}
+  companyName={companyName}
+/>
+
 
       {/* Main Content */}
       <main className="flex-1 lg:ml-64 transition-all duration-300">
