@@ -109,10 +109,13 @@ const AdminDashboard = () => {
       const { data } = await api.get("/admin/companies/list");
       setCompanies(data);
     } catch (error) {
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        window.location.href = "/login";
-      } else {
+    
+      if (error.response?.status === 401 || error.response?.status === 403) {
+  alert(error.response?.data?.message || "Action not allowed");
+  return;
+}
+
+      else {
         alert("Failed to fetch companies");
         console.error("Fetch companies error:", error);
       }
@@ -127,10 +130,13 @@ const AdminDashboard = () => {
       const { data } = await api.get("/admin/users/list");
       setUsers(data);
     } catch (error) {
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        window.location.href = "/login";
-      } else {
+     
+        if (error.response?.status === 401 || error.response?.status === 403) {
+  alert(error.response?.data?.message || "Action not allowed");
+  return;
+}
+
+       else {
         alert("Failed to fetch users");
         console.error("Fetch users error:", error);
       }

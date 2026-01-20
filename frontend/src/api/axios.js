@@ -17,15 +17,29 @@ api.interceptors.request.use((config) => {
 );
 
 //handle expired token
+
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem("authToken");
+    const status = error.response?.status;
+    const message = error.response?.data?.message || "";
+
+    //  Logout ONLY if token is expired / invalid
+    if (
+      status === 401 &&
+      (message.toLowerCase().includes("expired") ||
+       message.toLowerCase().includes("invalid token"))
+    ) {
+      localStorage.clear();
       window.location.href = "/login";
+      return;
     }
+
+    //  Otherwise just pass error to component
     return Promise.reject(error);
   }
 );
+
 
 export default api;

@@ -224,25 +224,38 @@ export default function DocumentManager({ role, companyId, companies: companiesP
   };
 
   // Preview document
-  const previewDoc = async (doc) => {
-    if (!isPreviewSupported(doc.filename)) {
-      alert("Preview is only available for PDF and image files.");
-      return;
-    }
+ 
 
-    try {
-      const res = await api.get(
-        `/admin/companies/${selectedCompany}/documents/${doc.id}`,
-        { responseType: "blob" }
+const previewDoc = async (doc) => {
+  if (!isPreviewSupported(doc.filename)) {
+    alert("Preview is only available for PDF and image files.");
+    return;
+  }
+
+  try {
+    const res = await api.get(
+      `/admin/companies/${selectedCompany}/documents/${doc.id}`,
+      { responseType: "blob" }
+    );
+
+    const url = URL.createObjectURL(res.data);
+    setPreview({ url, name: doc.filename });
+  } catch (error) {
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
+      alert(
+        error.response?.data?.message ||
+        "You are not allowed to preview this document"
       );
-
-      const url = URL.createObjectURL(res.data);
-      setPreview({ url, name: doc.filename });
-    } catch (error) {
-      alert("Failed to preview document");
-      console.error("Preview document error:", error);
+      return; // ⛔ STOP here — do NOT logout
     }
-  };
+
+    alert("Failed to preview document");
+    console.error("Preview document error:", error);
+  }
+};
+
 
   // Download document
   const downloadDoc = async (doc) => {
