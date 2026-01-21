@@ -77,7 +77,7 @@ const AdminDashboard = () => {
     setDetailsLoading(true);
 
     try {
-      const { data } = await api.get(`/admin/users/${userId}`);
+      const { data } = await api.get(`/users/${userId}`);
       setDetailsData(data);
     } catch (err) {
       alert("Failed to load user details");
@@ -109,10 +109,13 @@ const AdminDashboard = () => {
       const { data } = await api.get("/admin/companies/list");
       setCompanies(data);
     } catch (error) {
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        window.location.href = "/login";
-      } else {
+    
+      if (error.response?.status === 401 || error.response?.status === 403) {
+  alert(error.response?.data?.message || "Action not allowed");
+  return;
+}
+
+      else {
         alert("Failed to fetch companies");
         console.error("Fetch companies error:", error);
       }
@@ -127,10 +130,13 @@ const AdminDashboard = () => {
       const { data } = await api.get("/admin/users/list");
       setUsers(data);
     } catch (error) {
-      if (error.response?.status === 401) {
-        alert("Session expired. Please login again.");
-        window.location.href = "/login";
-      } else {
+     
+        if (error.response?.status === 401 || error.response?.status === 403) {
+  alert(error.response?.data?.message || "Action not allowed");
+  return;
+}
+
+       else {
         alert("Failed to fetch users");
         console.error("Fetch users error:", error);
       }
@@ -220,7 +226,7 @@ const AdminDashboard = () => {
     pendingFilter,
   ]);
 
-  const isUserPending = (userId) => pendingUsers.some((u) => u.id === userId);
+  /*const isUserPending = (userId) => pendingUsers.some((u) => u.id === userId);*/
 
   const toggleApproval = async (userId, approve) => {
     const confirmMsg = approve
@@ -662,17 +668,17 @@ const AdminDashboard = () => {
                                 {user.company?.name}
                               </td>
                               <td className="hidden sm:table-cell px-6 py-4">
+                              
                                 <span
-                                  className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                                    isUserPending(user.id)
-                                      ? "bg-yellow-100 text-yellow-700"
-                                      : "bg-green-100 text-green-700"
-                                  }`}
-                                >
-                                  {isUserPending(user.id)
-                                    ? "Pending"
-                                    : "Approved"}
-                                </span>
+                         className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                user.approved
+                           ? "bg-green-100 text-green-700"
+                         : "bg-yellow-100 text-yellow-700"
+                                        }`}
+                                                >
+                     {user.approved ? "Approved" : "Pending"}
+                                    </span>
+
                               </td>
                               <td className="px-4 sm:px-6 py-4 text-right ">
                                 <div className="flex justify-end gap-4 ">
@@ -700,30 +706,19 @@ const AdminDashboard = () => {
                                       : "Inactive"}
                                   </button>
 
+                               
                                   <button
-                                    onClick={() =>
-                                      toggleApproval(
-                                        user.id,
-                                        isUserPending(user.id) ? true : false
-                                      )
-                                    }
-                                    className={
-                                      isUserPending(user.id)
-                                        ? "text-green-600 hover:text-green-800"
-                                        : "text-orange-600 hover:text-orange-800"
-                                    }
-                                    title={
-                                      isUserPending(user.id)
-                                        ? "Approve user"
-                                        : "Disapprove user"
-                                    }
-                                  >
-                                    {isUserPending(user.id) ? (
-                                      <CheckCircle size={16} />
-                                    ) : (
-                                      <XCircle size={16} />
-                                    )}
-                                  </button>
+                                onClick={() => toggleApproval(user.id, !user.approved)}
+                                 className={
+                                 user.approved
+                                ? "text-orange-600 hover:text-orange-800"
+                               : "text-green-600 hover:text-green-800"
+                                        }
+                                 title={user.approved ? "Disapprove user" : "Approve user"}
+                                   >
+                                {user.approved ? <XCircle size={16} /> : <CheckCircle size={16} />}
+                                 </button>
+
 
                                   <button
                                     onClick={() => {
