@@ -2,6 +2,8 @@ import React, { useState , useEffect } from "react";
 import { Mail, Lock, Eye, EyeOff, Building2 } from "lucide-react";
 import api from "../api/axios.js";
 
+
+
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,7 @@ function LoginPage() {
   };
   fetchCompanies();
 }, []);
+  
 
 
   const [errors, setErrors] = useState({});
@@ -42,7 +45,7 @@ function LoginPage() {
     if (successMessage) setSuccessMessage("");
   };
 
-  const validateForm = () => {
+  /*const validateForm = () => {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
@@ -50,6 +53,21 @@ function LoginPage() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+*/
+
+const validateForm = () => {
+  const newErrors = {};
+  if (!formData.email.trim()) newErrors.email = "Email is required";
+  if (!formData.password) newErrors.password = "Password is required";
+
+  // only non-admin users need company
+  if (!formData.companyName.trim()) {
+    newErrors.companyName = "Company name is required";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -63,7 +81,7 @@ function LoginPage() {
       companyName: formData.companyName,
     });
 
-    const data = resp.data;
+   /* const data = resp.data;
     console.log("LOGIN RESPONSE RAW:", resp, data);
 
     // Extract token from any possible backend key
@@ -79,7 +97,25 @@ function LoginPage() {
     // Save credentials
     if (token) localStorage.setItem("authToken", token);
     if (role) localStorage.setItem("userRole", role);
-    localStorage.setItem("userData", JSON.stringify(data));
+    localStorage.setItem("userData", JSON.stringify(data));*/
+const data = resp.data;
+
+// 🔥 clear OLD user/admin session
+localStorage.clear();
+
+// Extract token safely
+const token = data.token || data.authToken || data.accessToken;
+const role = data.role ?? data.userRole ?? data.roleName;
+
+// Save fresh session
+if (token) localStorage.setItem("authToken", token);
+if (role) localStorage.setItem("role", role);
+
+// Store ONLY user object, not full response
+localStorage.setItem("userData", JSON.stringify(data.user || data));
+
+
+    
 
     console.log("LocalStorage after set:", {
       authToken: localStorage.getItem("authToken"),

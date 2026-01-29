@@ -48,6 +48,23 @@ const AdminDashboard = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const companiesFetchedRef = useRef(false);
   const lastFetchedTabRef = useRef(null);
+  //roles
+  const [roles, setRoles] = useState([]);
+
+
+  const fetchRoles = async () => {
+  try {
+    const { data } = await api.get("/admin/roles");
+    setRoles(data);
+  } catch (error) {
+    alert("Failed to fetch roles");
+    console.error(error);
+  }
+};
+useEffect(() => {
+  fetchRoles();
+}, []);
+
 
   // Get active tab from URL
   // =========================================================
@@ -342,7 +359,8 @@ const AdminDashboard = () => {
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
-      localStorage.removeItem("authToken");
+      /*localStorage.removeItem("authToken");*/
+      localStorage.clear();
       window.location.href = "/login";
     }
   };
