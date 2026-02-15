@@ -56,7 +56,7 @@ export default function ContactSection() {
             
             <h3 className="font-bold text-gray-900 text-lg mb-3">Email Us</h3>
             <p className="text-gray-600 text-sm">
-              info@ gstechsystems.com
+              info@gstechsystems.com, support@gstechsystems.com
             </p>
           </div>
 

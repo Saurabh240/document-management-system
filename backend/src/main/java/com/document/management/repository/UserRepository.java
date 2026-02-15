@@ -29,6 +29,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
    """)
     List<User> findAllUsersOrderByCreatedAtDesc();
 
+    @Query("""
+   SELECT u
+   FROM User u
+   ORDER BY u.createdAt DESC
+   """)
+    List<User> findAllUsersForAdminOrderByCreatedAtDesc();
+
 
     boolean existsByEmail(String email);
 

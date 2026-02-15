@@ -161,6 +161,7 @@ export default function Footer() {
                 <p className="text-gray-600">
                   <span className="text-blue-900 font-semibold">Email:</span>{" "}
                   info@gstechsystems.com
+                  <span className="text-blue-900 font-semibold">Email:</span> info@gstechsystems.com, support@gstechsystems.com
                 </p>
               </div>
             </div>
