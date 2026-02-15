@@ -8,14 +8,20 @@ const Navbar = () => {
     services: false,
     about: false,
   });
-  const [mobileDropdowns, setMobileDropdowns] = useState({  // ← ADD THIS BACK
+  const [mobileDropdowns, setMobileDropdowns] = useState({
     services: false,
     about: false,
   });
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
+  // Auth state: sync with localStorage so navbar shows correct state on every page
+  // Role is stored as "role" by LoginPage; support "userRole" for backwards compatibility
+  const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem("authToken"));
+  const [userRole, setUserRole] = useState(() => localStorage.getItem("role") || localStorage.getItem("userRole") || "");
+
   const isLandingPage = location.pathname === "/";
+  const dashboardPath = userRole === "SUPER_ADMIN" ? "/admin/dashboard" : "/user/dashboard";
 
   // Memoized scroll handler
   const handleScroll = useCallback(() => {
@@ -60,8 +66,19 @@ const Navbar = () => {
   useEffect(() => {
     setDropdownOpen({ services: false, about: false });
     setMobileOpen(false);
-    setMobileDropdowns({ services: false, about: false });  // ← RESET THIS TOO
+    setMobileDropdowns({ services: false, about: false });
   }, [location]);
+
+  // Sync auth state with localStorage on mount, route change, and when storage changes (e.g. login/logout/expiry)
+  useEffect(() => {
+    const syncAuth = () => {
+      setIsLoggedIn(!!localStorage.getItem("authToken"));
+      setUserRole(localStorage.getItem("role") || localStorage.getItem("userRole") || "");
+    };
+    syncAuth();
+    window.addEventListener("storage", syncAuth);
+    return () => window.removeEventListener("storage", syncAuth);
+  }, [location.pathname]);
 
   // Consistent menu structure
   const navItems = {
@@ -113,7 +130,18 @@ const Navbar = () => {
   const closeAllMenus = () => {
     setMobileOpen(false);
     setDropdownOpen({ services: false, about: false });
-    setMobileDropdowns({ services: false, about: false });  // ← RESET THIS TOO
+    setMobileDropdowns({ services: false, about: false });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userData");
+    setIsLoggedIn(false);
+    setUserRole("");
+    closeAllMenus();
+    window.location.href = "/";
   };
 
   // Keyboard navigation handler
@@ -231,17 +259,43 @@ const Navbar = () => {
               Contact Us
             </Link>
           </li>
-          <li>
-            <Link
-              to="/login"
-              className={`px-4 py-2 ml-2 rounded-2xl font-semibold transition-colors duration-200 ${
-                !isLandingPage || scrolled
-                  ? "bg-white text-blue-900 hover:bg-gray-200"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
-              }`}
-            >
-              Login
-            </Link>
+          <li className="flex items-center gap-3">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to={dashboardPath}
+                  className={`px-4 py-2 rounded-2xl font-semibold transition-colors duration-200 ${
+                    !isLandingPage || scrolled
+                      ? "bg-white text-blue-900 hover:bg-gray-200"
+                      : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className={`px-4 py-2 rounded-2xl font-semibold transition-colors duration-200 ${
+                    !isLandingPage || scrolled
+                      ? "bg-white/90 text-blue-900 hover:bg-gray-200"
+                      : "bg-blue-700 text-white hover:bg-blue-800"
+                  }`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className={`px-4 py-2 ml-2 rounded-2xl font-semibold transition-colors duration-200 ${
+                  !isLandingPage || scrolled
+                    ? "bg-white text-blue-900 hover:bg-gray-200"
+                    : "bg-blue-600 text-white hover:bg-blue-700"
+                }`}
+              >
+                Login
+              </Link>
+            )}
           </li>
         </ul>
 
@@ -336,13 +390,35 @@ const Navbar = () => {
               </Link>
             </div>
             <div className="border-b border-blue-700">
-              <Link
-                to="/login"
-                className="block py-3 text-lg font-semibold text-white hover:bg-blue-800 rounded-lg px-2 transition-colors duration-200"
-                onClick={closeAllMenus}
-              >
-                Login
-              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to={dashboardPath}
+                    className="block py-3 text-lg font-semibold text-white hover:bg-blue-800 rounded-lg px-2 transition-colors duration-200"
+                    onClick={closeAllMenus}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    className="block w-full text-left py-3 text-lg font-semibold text-white hover:bg-blue-800 rounded-lg px-2 transition-colors duration-200"
+                    onClick={() => {
+                      closeAllMenus();
+                      handleLogout();
+                    }}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="block py-3 text-lg font-semibold text-white hover:bg-blue-800 rounded-lg px-2 transition-colors duration-200"
+                  onClick={closeAllMenus}
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>
