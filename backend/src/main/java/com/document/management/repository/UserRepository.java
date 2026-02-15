@@ -24,7 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("""
    SELECT u
    FROM User u
-   WHERE u.role.name = USER
    ORDER BY u.createdAt DESC
    """)
     List<User> findAllUsersOrderByCreatedAtDesc();
